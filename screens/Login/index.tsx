@@ -10,8 +10,9 @@ import {
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
-  View,
+  View
 } from "react-native";
+import Toast from "react-native-toast-message";
 import Button from "../../components/Button";
 import Textbox from "../../components/Textbox";
 import apiUrl from "../../constants/apiUrl";
@@ -38,16 +39,23 @@ const Login = ({ navigation }) => {
         }
       });
 
+      Toast.show({
+        type: 'success',
+        text2: 'Successfully signed in',
+      });
+
       // https://reactnative.dev/docs/navigation
       navigation.navigate('Home');
-
     } catch (error) {
         if(error.response.status === 500)
             return Alert.alert("Error", "An error has occurred, please contact the office");        
         
         const { message } = error.response.data;
 
-        Alert.alert("Login failed", message);
+        Toast.show({
+          type: 'error',
+          text2: message,
+        });
     }
   };
 
