@@ -86,7 +86,7 @@ const Navigation = () => {
                 },
               ]}
             >
-              <Icon name={iconName} size={35} color="#222222" />
+              <Icon name={iconName} size={30} color="#222222" />
             </View>
           );
         },
