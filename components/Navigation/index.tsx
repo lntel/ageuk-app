@@ -36,11 +36,9 @@ const Navigation = () => {
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
-          height: "15%",
+          // height: "100%",
           backgroundColor: "#ffffff",
           shadowColor: "#222222",
-          paddingHorizontal: 10,
-          paddingTop: 30,
           shadowOffset: {
             width: 0,
             height: 4,
