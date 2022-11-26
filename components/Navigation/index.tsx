@@ -1,8 +1,8 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
-import { Image, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import Home from "../../screens/Home";
+import Dashboard from "../../screens/Dashboard";
 import Patients from "../../screens/Patients";
 import Staff from "../../screens/Staff";
 import Surgeries from "../../screens/Surgeries";
@@ -87,15 +87,18 @@ const Navigation = () => {
               ]}
             >
               <Icon name={iconName} size={30} color="#222222" />
+              <Text style={{
+                marginTop: 4
+              }}>{route.name}</Text>
             </View>
           );
         },
         tabBarLabel: ({ focused }) => {
-          return <Text>{route.name}</Text>;
+          // return <Text>{route.name}</Text>;
         },
       })}
     >
-      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Home" component={Dashboard} />
       <Tab.Screen name="Patients" component={Patients} />
       <Tab.Screen name="Staff" component={Staff} />
       <Tab.Screen name="Surgeries" component={Surgeries} />

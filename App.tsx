@@ -4,11 +4,26 @@ import Toast from "react-native-toast-message";
 import Navigation from "./components/Navigation";
 import { toastConfig } from "./config/toast.config";
 import Login from "./screens/Login";
+import * as LocalAuthentication from 'expo-local-authentication';
+import { useEffect } from "react";
 
 // https://reactnative.dev/docs/navigation
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+
+  useEffect(() => {
+    localBiometricAuth();
+  }, [])
+
+  const localBiometricAuth = async () => {
+    const canUseBio = await LocalAuthentication.hasHardwareAsync();
+
+    if(canUseBio)
+      await LocalAuthentication.authenticateAsync();
+  }
+  
+
   return (
     <>
     <NavigationContainer>
