@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Alert,
   Image,
@@ -16,6 +16,7 @@ import Toast from "react-native-toast-message";
 import Button from "../../components/Button";
 import Textbox from "../../components/Textbox";
 import apiUrl from "../../constants/apiUrl";
+import { AuthContext } from "../../context/AuthContext";
 
 const logoImage = require("../../assets/images/age-uk-logo-no-strap.png");
 const backgroundImage = {
@@ -25,6 +26,8 @@ const backgroundImage = {
 const Login = ({ navigation }) => {
   const [emailAddress, setEmailAddress] = useState<string>("joeharris461767@gmail.com");
   const [password, setPassword] = useState<string>("testing123");
+
+  const { state, dispatch } = useContext(AuthContext);
 
   const handleLogin = async () => {
 
@@ -36,6 +39,20 @@ const Login = ({ navigation }) => {
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
+        }
+      });
+      
+      dispatch({
+        type: 'SET_ACCESS_TOKEN',
+        state: {
+          accessToken: response.data.accessToken
+        }
+      });
+
+      dispatch({
+        type: 'SET_REFRESH_TOKEN',
+        state: {
+          refreshToken: response.data.refreshToken
         }
       });
 

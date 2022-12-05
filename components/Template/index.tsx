@@ -1,33 +1,49 @@
-import React, { FC } from 'react';
-import { StyleSheet, View } from "react-native";
-import Topbar from '../Topbar';
+import React, { FC, useState } from 'react';
+import { StyleSheet, View, Text, SafeAreaView, ScrollView, RefreshControl } from "react-native";
 
 export type TemplateProps = {
     children: any;
+    title: string;
+    refreshing?: boolean;
+    onRefresh?: () => void;
 }
 
-const Template: FC<TemplateProps> = ({ children }) => {
-  return (
-    <View style={styles.container}>
-        {/* <Topbar /> */}
-        <View style={styles.contentContainer}>
-            { children }
-        </View>
-    </View>
-  )
-}
-
-const styles = StyleSheet.create({
+const Template: FC<TemplateProps> = ({ children, title, refreshing, onRefresh }) => {
+    return (
+        <SafeAreaView style={styles.container}>
+            <View style={styles.templateContainer}>
+                <Text style={styles.title}>{ title }</Text>
+                <ScrollView style={styles.scrollView} refreshControl={
+                    <RefreshControl 
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }>
+                    { children }
+                </ScrollView>
+            </View>
+        </SafeAreaView>
+    )
+  };
+  
+  const styles = StyleSheet.create({
     container: {
+        width: '100%',
         flex: 1,
-        display: "flex",
-        backgroundColor: '#f1f1f1',
-        color: '#ffffff'
     },
-    contentContainer: {
+    templateContainer: {
+        padding: 16,
+        width: '100%',
         flex: 1,
-        backgroundColor: '#f1f1f1'
+    },
+    scrollView: {
+        padding: 16,
+        paddingHorizontal: 2
+    },
+    title: {
+        fontSize: 26,
+        marginVertical: 10
     }
-});
+  });
 
 export default Template
