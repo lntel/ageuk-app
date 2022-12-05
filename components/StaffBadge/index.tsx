@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, Linking } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import MaIcon from "react-native-vector-icons/MaterialIcons";
 import DefaultAvatar from "../../assets/images/avatar.svg";
@@ -10,6 +10,7 @@ export type StaffBadgeProps = {
   surname: string;
   roleName: string;
   avatarFilename?: string;
+  workPhone?: string;
 };
 
 const StaffBadge: FC<StaffBadgeProps> = ({
@@ -17,6 +18,7 @@ const StaffBadge: FC<StaffBadgeProps> = ({
   surname,
   roleName,
   avatarFilename,
+  workPhone
 }) => {
   const avatar = { uri: `${apiUrl}/uploads/${avatarFilename}` };
 
@@ -43,10 +45,12 @@ const StaffBadge: FC<StaffBadgeProps> = ({
           <Text>{roleName}</Text>
         </View>
       </View>
-      <View style={styles.actions}>
-        <Icon name="phone-alt" size={30} color="#23A2D1" />
-        <MaIcon name="sms" size={30} color="#23A2D1" />
-      </View>
+      {workPhone ? (
+        <View style={styles.actions}>
+          <Icon name="phone-alt" size={30} color="#23A2D1" onPress={() => Linking.openURL(`tel://${workPhone}`)} />
+          <MaIcon name="sms" size={30} color="#23A2D1" onPress={() => Linking.openURL(`sms://${workPhone}`)} />
+        </View>
+      ) : null}
     </View>
   );
 };

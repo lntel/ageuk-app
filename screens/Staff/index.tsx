@@ -8,6 +8,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 const Staff = ({ navigation }) => {
   const [staff, setStaff] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const { state } = useContext(AuthContext);
 
@@ -33,16 +34,21 @@ const Staff = ({ navigation }) => {
     }
   };
 
+  const onRefresh = async () => {
+    await getStaff();
+  }
+
   return (
-    <Template title="Staff Directory">
+    <Template title="Staff Directory" refreshing={refreshing} onRefresh={onRefresh}>
       {staff.length
-        ? staff.map((s) => (
+        ? staff.sort((a, b) => a.surname.localeCompare(b.surname)).map((s) => (
             <StaffBadge
               forename={s.forename}
               surname={s.surname}
               avatarFilename={s.avatarFilename}
               roleName={s.role.name}
               key={s.id}
+              workPhone={s.workPhone}
             />
           ))
         : null}

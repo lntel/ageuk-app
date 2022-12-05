@@ -1,17 +1,24 @@
-import React, { FC } from 'react';
-import { StyleSheet, View, Text, SafeAreaView, ScrollView } from "react-native";
+import React, { FC, useState } from 'react';
+import { StyleSheet, View, Text, SafeAreaView, ScrollView, RefreshControl } from "react-native";
 
 export type TemplateProps = {
     children: any;
     title: string;
+    refreshing?: boolean;
+    onRefresh?: () => void;
 }
 
-const Template: FC<TemplateProps> = ({ children, title }) => {
+const Template: FC<TemplateProps> = ({ children, title, refreshing, onRefresh }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.templateContainer}>
                 <Text style={styles.title}>{ title }</Text>
-                <ScrollView style={styles.scrollView}>
+                <ScrollView style={styles.scrollView} refreshControl={
+                    <RefreshControl 
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }>
                     { children }
                 </ScrollView>
             </View>
