@@ -1,70 +1,105 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Text, View } from "react-native";
-import Template from '../../components/Template';
-import { Agenda, AgendaSchedule, DateData } from 'react-native-calendars';
-import CalendarEvent from './CalendarEvent';
-import axios from 'axios';
-import apiUrl from '../../constants/apiUrl';
-import { AuthContext } from '../../context/AuthContext';
+import React, { useContext, useEffect, useState } from "react";
+import { Text, View, StyleSheet } from "react-native";
+import Template from "../../components/Template";
+import {
+  Agenda,
+  AgendaEntry,
+  AgendaSchedule,
+  DateData,
+} from "react-native-calendars";
+import CalendarEventProps from "./CalendarEvent";
+import axios from "axios";
+import apiUrl from "../../constants/apiUrl";
+import { AuthContext } from "../../context/AuthContext";
+import { CalendarEvent as CallEvent } from "../../types";
+import EmptyDate from "./EmptyDate";
 
 const Dashboard = () => {
+  const [calls, setCalls] = useState<CallEvent[]>([]);
 
-  const [events, setEvents] = useState<AgendaSchedule>();
+  const { state } = useContext(AuthContext);
 
   useEffect(() => {
-    console.log(events)
-  }, [events])
-  
+    loadMonthEvents();
+  }, []);
 
-  const loadMonthEvents = async (date: DateData) => {
-    const { dateString, day } = date;
-
-    setEvents({
-      [dateString]: [{
-        name: 'test',
-        day: String(day),
-        height: 80
-      }]
-    })
-
-    const { state } = useContext(AuthContext);
+  const loadMonthEvents = async () => {
+    // const { dateString, day } = date;
 
     try {
-      const response = await axios.post(`${apiUrl}/call`, {
+      const response = await axios.get(`${apiUrl}/call`, {
         headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            Authorization: `Bearer ${state.accessToken}`,
-        }
+          "Content-Type": "applsication/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${state.accessToken}`,
+        },
       });
 
-      console.log(response)
+      const data = response.data;
+
+      setCalls(data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
+
+  const getDateString = (date: string) => {
+    return date.split("T")[0];
+  };
+
+  const formatCallsAsItems = () => {
+    const events: AgendaSchedule = {};
+
+    calls.forEach((call) => {
+      const formattedDate = getDateString(new Date(call.date).toISOString());
+
+      const day = formattedDate.split("-")[2];
+
+      const callObject: AgendaEntry = {
+        height: 100,
+        name: call.id,
+        day,
+      };
+
+      events[formattedDate] = events[formattedDate]
+        ? [...events[formattedDate], callObject]
+        : [callObject];
+    });
+
+    return events;
+  };
+
+  const onRenderItem = (item: AgendaEntry) => {
+    const call = calls.find((c) => c.id === item.name);
+
+    return (
+      <CalendarEventProps
+        time={call.time}
+        date={call.date}
+        id={call.id}
+        patient={call.patient}
+        staff={call.staff}
+      />
+    );
+  };
 
   return (
     <Template title="Dashboard">
-      <Agenda 
-      // items={{
-      //   '2023-01-01': [{name: 'item1', height: 80, day: '1'}]
-      // }}
-      // markedDates={{
-      //   '2023-01-29': {marked: true}
-      // }}
-      // renderItem={() => <View />}
-      items={events}
-      onMonthChange={loadMonthEvents}
-      disableMonthChange={true}
-      minDate='2023-01-14'
-      maxDate={'2023-01-27'}
-      renderEmptyDate={() => <View />}
-      showClosingKnob={true}
-      firstDay={6}
+      <Agenda
+        items={formatCallsAsItems()}
+        renderItem={onRenderItem}
+        renderEmptyData={EmptyDate}
+        disableMonthChange={true}
+        pastScrollRange={1}
+        futureScrollRange={1}
+        minDate="2023-01-14"
+        maxDate={"2023-01-27"}
+        renderEmptyDate={() => <View />}
+        showClosingKnob={true}
+        firstDay={6}
       />
     </Template>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;
