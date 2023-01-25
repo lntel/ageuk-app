@@ -28,7 +28,7 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={Login} />
           {/* https://reactnavigation.org/docs/hiding-tabbar-in-screens */}
-          <Stack.Screen name="Home" component={Navigation} />
+          <Stack.Screen name="Root" component={Navigation} />
         </Stack.Navigator>
       </NavigationContainer>
       <Toast config={toastConfig} />

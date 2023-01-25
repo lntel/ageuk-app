@@ -50,7 +50,8 @@ const Navigation = () => {
           let iconName;
 
           switch (route.name) {
-            case "Home":
+            
+            case "Dashboard":
               iconName = "home";
               break;
 
@@ -96,7 +97,7 @@ const Navigation = () => {
         },
       })}
     >
-      <Tab.Screen name="Home" component={Dashboard} />
+      <Tab.Screen name="Dashboard" component={Dashboard} />
       <Tab.Screen name="Patients" component={Patients} />
       <Tab.Screen name="Staff" component={Staff} />
       <Tab.Screen name="Surgeries" component={Surgeries} />

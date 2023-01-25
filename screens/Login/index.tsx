@@ -62,7 +62,7 @@ const Login = ({ navigation }) => {
       });
 
       // https://reactnative.dev/docs/navigation
-      navigation.navigate('Home');
+      navigation.navigate('Root', { screen: 'Dashboard' });
     } catch (error) {
         if(error.response.status === 500)
             return Alert.alert("Error", "An error has occurred, please contact the office");        
