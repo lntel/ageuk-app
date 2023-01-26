@@ -1,34 +1,41 @@
-import React, { FC } from 'react';
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { CalendarEvent as CalendarEventProps } from '../../types';
 import { useNavigation } from '@react-navigation/native';
+import React, { FC } from 'react';
+import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { CalendarEvent as CalendarEventProps } from '../../types';
 
 const CalendarEvent: FC<CalendarEventProps> = ({ time, date, id, patient, staff }) => {
-
-    const navigation = useNavigation();
 
     const onPress = () => {
 
         // ! Blocker: patient pages need implementing
         // TODO implement a redirect to a specific patient
 
-      console.log(patient.id)
-    //   navigation.navigate()
-    }
+        const formattedPostcode = patient?.postcode.replaceAll(' ', '+');
+
+        // * https://developers.google.com/maps/documentation/urls/ios-urlscheme#directions
+        Linking.openURL(`comgooglemaps://?daddr=${formattedPostcode}&directionsmode=driving`)
+      }
 
     return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-        <Text style={styles.timestamp}>
-            {time}
-        </Text>
-        <Text style={styles.patientName}>
-            {patient.firstName} {patient.surname}
-        </Text>
-        <ScrollView>
-            {staff.map(s => 
-                <Text style={styles.staffName}>{s.forename} {s.surname}</Text>
-            )}
-        </ScrollView>
+        <View>
+          <Text style={styles.timestamp}>
+              {time}
+          </Text>
+          <Text style={styles.patientName}>
+              {patient.firstName} {patient.surname}
+          </Text>
+          <View>
+              {staff.map(s => 
+                  <Text style={styles.staffName}>{s.forename} {s.surname}</Text>
+              )}
+          </View>
+        </View>
+        <Icon name="directions" style={{
+          fontSize: 36,
+          color: '#23A2D1'
+        }} />
     </TouchableOpacity>
   )
 }
@@ -36,6 +43,9 @@ const CalendarEvent: FC<CalendarEventProps> = ({ time, date, id, patient, staff 
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     fontSize: 16,
     color: 'black',
   },

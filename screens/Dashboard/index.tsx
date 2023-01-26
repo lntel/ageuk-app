@@ -83,8 +83,12 @@ const Dashboard = () => {
     );
   };
 
+  const onRefresh = () => {
+    loadMonthEvents();
+  }
+
   return (
-    <Template title="Dashboard">
+    <Template title="Dashboard" onRefresh={onRefresh}>
       <Agenda
         items={formatCallsAsItems()}
         renderItem={onRenderItem}
