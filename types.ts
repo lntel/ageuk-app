@@ -12,13 +12,31 @@ export interface Patient {
     city: string;
     id: string;
     diagnoses: string[];
-    generalPractionerId: number;
+    generalPractioner: IGpSurgery;
     referralId?: number;
     eightWeekReview: Date;
     sixWeekReview: Date;
     telephoneNumber: string;
     dob: Date;
     gpFullname: string;
+    updatedAt: string;
+    referredBy: string;
+    nokDetails: string;
+    firstPointOfContact: string;
+    additionalContacts: string[];
+    assessment: {
+        dnacpr: boolean;
+        riskOfPressure: boolean;
+        reduceMobility: boolean;
+        marChart: boolean;
+        careAssistant: boolean;
+        pressureSore: boolean;
+        weightBear: boolean;
+        painSymptom: boolean;
+        medication: boolean;
+        syringeDriver: boolean;
+        syringeDriverSetupDate: string;
+    }
 }
 
 export interface CalendarEvent {
