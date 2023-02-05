@@ -7,9 +7,19 @@ import Navigation from "./components/Navigation";
 import { toastConfig } from "./config/toast.config";
 import { AuthProvider } from "./context/AuthContext";
 import Login from "./screens/Login";
+import * as Notifications from 'expo-notifications';
 
 // https://reactnative.dev/docs/navigation
 const Stack = createNativeStackNavigator();
+
+// https://docs.expo.dev/versions/latest/sdk/notifications/#usage
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+  }),
+});
 
 export default function App() {
   useEffect(() => {
