@@ -1,17 +1,16 @@
+import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
-import Template from "../../components/Template";
+import { View } from "react-native";
 import {
   Agenda,
   AgendaEntry,
-  AgendaSchedule,
-  DateData,
+  AgendaSchedule
 } from "react-native-calendars";
-import CalendarEventProps from "./CalendarEvent";
-import axios from "axios";
+import Template from "../../components/Template";
 import apiUrl from "../../constants/apiUrl";
 import { AuthContext } from "../../context/AuthContext";
 import { CalendarEvent as CallEvent } from "../../types";
+import CalendarEventProps from "./CalendarEvent";
 import EmptyDate from "./EmptyDate";
 
 const Dashboard = () => {
@@ -72,6 +71,9 @@ const Dashboard = () => {
   const onRenderItem = (item: AgendaEntry) => {
     const call = calls.find((c) => c.id === item.name);
 
+    if(!call)
+      return <EmptyDate />;
+
     return (
       <CalendarEventProps
         time={call.time}
@@ -96,8 +98,8 @@ const Dashboard = () => {
         disableMonthChange={true}
         pastScrollRange={1}
         futureScrollRange={1}
-        minDate="2023-01-14"
-        maxDate={"2023-01-27"}
+        // minDate="2023-01-14"
+        // maxDate={"2023-01-27"}
         renderEmptyDate={() => <View />}
         showClosingKnob={true}
         firstDay={6}
