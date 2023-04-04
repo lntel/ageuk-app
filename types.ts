@@ -1,4 +1,4 @@
-import { PermissionTypeEnum } from "./enums/permissions";
+import { PermissionTypeEnum } from "./enum/PermissionTypeEnum";
 
 export interface Patient {
     surname: string;
@@ -43,8 +43,13 @@ export interface CalendarEvent {
     id: string;
     time: string;
     date: Date;
+    startTime: Date;
+    endTime: Date;
+    startTravelTime: Date;
+    endTravelTime: Date;
     patient: Patient;
     staff: IStaff[];
+    onSelected: (callId: string) => void;
 }
 
 export interface IStaff {

@@ -1,11 +1,8 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { View } from "react-native";
-import {
-  Agenda,
-  AgendaEntry,
-  AgendaSchedule
-} from "react-native-calendars";
+import { Modal, View, Text } from "react-native";
+import { Agenda, AgendaEntry, AgendaSchedule } from "react-native-calendars";
+import CallLogger from "../../components/CallLogger";
 import Template from "../../components/Template";
 import apiUrl from "../../constants/apiUrl";
 import { AuthContext } from "../../context/AuthContext";
@@ -14,6 +11,7 @@ import CalendarEventProps from "./CalendarEvent";
 import EmptyDate from "./EmptyDate";
 
 const Dashboard = () => {
+  const [selectedCall, setSelectedCall] = useState<CallEvent | null>(null);
   const [calls, setCalls] = useState<CallEvent[]>([]);
 
   const { state } = useContext(AuthContext);
@@ -71,23 +69,27 @@ const Dashboard = () => {
   const onRenderItem = (item: AgendaEntry) => {
     const call = calls.find((c) => c.id === item.name);
 
-    if(!call)
-      return <EmptyDate />;
+    if (!call) return <EmptyDate />;
 
     return (
       <CalendarEventProps
         time={call.time}
+        startTravelTime={call.startTravelTime}
+        endTravelTime={call.endTravelTime}
+        startTime={call.startTime}
+        endTime={call.endTime}
         date={call.date}
         id={call.id}
         patient={call.patient}
         staff={call.staff}
+        onSelected={(id) => setSelectedCall(calls.find(c => c.id == id))}
       />
     );
   };
 
   const onRefresh = () => {
     loadMonthEvents();
-  }
+  };
 
   return (
     <Template title="Dashboard" onRefresh={onRefresh}>
@@ -104,6 +106,14 @@ const Dashboard = () => {
         showClosingKnob={true}
         firstDay={6}
       />
+      {Boolean(selectedCall) && (
+        <CallLogger visible={Boolean(selectedCall)} onClose={() => setSelectedCall(null)} startTravelTime={selectedCall.startTravelTime}
+          endTravelTime={selectedCall.endTravelTime}
+          startTime={selectedCall.startTime}
+          endTime={selectedCall.endTime} 
+          id={selectedCall.id}
+          />
+      )}
     </Template>
   );
 };

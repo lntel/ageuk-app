@@ -4,9 +4,18 @@ import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { CalendarEvent as CalendarEventProps } from '../../types';
 
-const CalendarEvent: FC<CalendarEventProps> = ({ time, date, id, patient, staff }) => {
+const CalendarEvent: FC<CalendarEventProps> = ({ time, startTravelTime, endTravelTime, startTime, endTime, date, id, patient, staff, onSelected }) => {
 
-    const onPress = () => {
+  const getCallStatus = () => {
+    if(Boolean(startTravelTime) && !Boolean(endTravelTime)) return "In-Transit";
+    if((Boolean(startTime) || Boolean(endTravelTime)) && !Boolean(endTime)) return "In-Progress";
+    if(Boolean(startTravelTime) && Boolean(endTravelTime) && Boolean(startTime) && Boolean(endTime)) return "Complete";
+    return "Incomplete";
+  }
+
+    const openPatientOnMap = () => {
+
+      console.log(`status${getCallStatus()}`)
 
         // ! Blocker: patient pages need implementing
         // TODO implement a redirect to a specific patient
@@ -18,7 +27,7 @@ const CalendarEvent: FC<CalendarEventProps> = ({ time, date, id, patient, staff 
       }
 
     return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity style={styles.container} onPress={() => onSelected(id)}>
         <View>
           <Text style={styles.timestamp}>
               {time}
@@ -26,13 +35,16 @@ const CalendarEvent: FC<CalendarEventProps> = ({ time, date, id, patient, staff 
           <Text style={styles.patientName}>
               {patient.firstName} {patient.surname}
           </Text>
+          <Text style={styles[`status${getCallStatus()}`]}>
+            {getCallStatus()}
+          </Text>
           <View>
               {staff.map(s => 
                   <Text style={styles.staffName}>{s.forename} {s.surname}</Text>
               )}
           </View>
         </View>
-        <Icon name="directions" style={{
+        <Icon name="directions" onPress={openPatientOnMap} style={{
           fontSize: 36,
           color: '#23A2D1'
         }} />
@@ -65,6 +77,28 @@ const styles = StyleSheet.create({
       marginTop: 3,
       fontSize: 16
     },
+    statusIncomplete: {
+      backgroundColor: '#e75555',
+      color: '#fff',
+      marginBottom: 10,
+      textTransform: 'uppercase',
+      fontSize: 12,
+      padding: 5,
+      borderRadius: 10,
+      maxWidth: 200,
+      width: 130,
+    },
+    statusComplete: {
+      backgroundColor: '#73fd96',
+      color: '#222',
+      marginBottom: 10,
+      textTransform: 'uppercase',
+      fontSize: 12,
+      padding: 5,
+      borderRadius: 10,
+      maxWidth: 200,
+      width: 130,
+    }
 });
 
 export default CalendarEvent
