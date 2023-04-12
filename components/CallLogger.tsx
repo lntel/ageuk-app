@@ -26,11 +26,12 @@ const CallLogger: FC<CallLoggerProps> = ({ id, visible, onClose, startTime, endT
     const { state } = useContext(AuthContext);
 
     const submitCallLog = async () => {
+
         const response = await axios.patch(`${apiUrl}/call/${id}`, {
-            startTime: start,
-            endTime: end,
-            startTravelTime: travelStart,
-            endTravelTime: travelEnd
+            startTime: start || startTime,
+            endTime: end || endTime,
+            startTravelTime: travelStart || startTravelTime,
+            endTravelTime: travelEnd || endTravelTime
             }, {
             headers: {
                 "Content-Type": "application/json",
@@ -60,7 +61,7 @@ const CallLogger: FC<CallLoggerProps> = ({ id, visible, onClose, startTime, endT
             <Text style={styles.timePickerTitle}>When did you travel to the call?</Text>
             <DateTimePicker
             testID="dateTimePicker"
-            value={travelStart}
+            value={travelStart || new Date()}
             mode={'time'}
             is24Hour={true}
             onChange={(e, d) => setTravelStart(d)}
@@ -72,7 +73,7 @@ const CallLogger: FC<CallLoggerProps> = ({ id, visible, onClose, startTime, endT
             <Text style={styles.timePickerTitle}>When did you arrive at the call?</Text>
             <DateTimePicker
             testID="dateTimePicker"
-            value={travelEnd}
+            value={travelEnd || new Date()}
             mode={'time'}
             is24Hour={true}
             onChange={(e, d) => setTravelEnd(d)}
@@ -84,7 +85,7 @@ const CallLogger: FC<CallLoggerProps> = ({ id, visible, onClose, startTime, endT
             <Text style={styles.timePickerTitle}>When did the care start?</Text>
             <DateTimePicker
             testID="dateTimePicker"
-            value={start}
+            value={start || new Date()}
             mode={'time'}
             is24Hour={true}
             onChange={(e, d) => setStart(d)}
@@ -96,7 +97,7 @@ const CallLogger: FC<CallLoggerProps> = ({ id, visible, onClose, startTime, endT
             <Text style={styles.timePickerTitle}>When did the care end?</Text>
             <DateTimePicker
             testID="dateTimePicker"
-            value={end}
+            value={end || new Date()}
             mode={'time'}
             is24Hour={true}
             onChange={(e, d) => setEnd(d)}
